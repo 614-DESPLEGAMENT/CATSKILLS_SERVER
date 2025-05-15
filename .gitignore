@@ -1,0 +1,12 @@
+# Ignora TOT dins repositoris dels competidors
+db_mariadb/*
+db_mysql/*
+gitea/config/*
+gitea/data/*
+
+
+# Però NO ignoris el fitxer .gitkeep
+!db_mariadb/.gitkeep
+!db_mysql/.gitkeep
+!gitea/config/.gitkeep
+!gitea/data/.gitkeep
