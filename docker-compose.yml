@@ -12,8 +12,8 @@ services:
       - GITEA__database__PASSWD=gitea
     restart: always
     volumes:
-      - ./data:/var/lib/gitea
-      - ./config:/etc/gitea
+      - ./gitea/data:/var/lib/gitea
+      - ./gitea/config:/etc/gitea
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
@@ -32,7 +32,7 @@ services:
       - MYSQL_PASSWORD=gitea
       - MYSQL_DATABASE=gitea
     volumes:
-        - ../db_mysql:/var/lib/mysql
+        - ./db_mysql:/var/lib/mysql
 #Contenidor per la base de dades de MariaDB
 #Aquest contenidor tindrà la base de dades de les aplicacions desenvolupades
   db_mariadb:
@@ -44,7 +44,7 @@ services:
       - MARIADB_DATABASE=prova 
       - MARIADB_ROOT_PASSWORD=rootpass
     volumes:
-      - ../db_mariadb:/var/lib/mysql
+      - ./db_mariadb:/var/lib/mysql
   phpmyadmin:
     image: phpmyadmin:latest
     restart: always
@@ -62,7 +62,7 @@ services:
     image: nginx:latest
     restart: always
     volumes:
-    - ../nginx/templates:/etc/nginx/templates
+    - ./nginx/templates:/etc/nginx/templates
     ports:
     - "8080:80"
     environment:
