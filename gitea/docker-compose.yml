@@ -1,0 +1,70 @@
+
+services:
+#Contenidor per Gitea
+#Gitea és un gestor de repositoris Git autohostejat
+  server:
+    image: docker.gitea.com/gitea:latest-rootless
+    environment:
+      - GITEA__database__DB_TYPE=mysql
+      - GITEA__database__HOST=db:3306
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=gitea
+      - GITEA__database__PASSWD=gitea
+    restart: always
+    volumes:
+      - ./data:/var/lib/gitea
+      - ./config:/etc/gitea
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "2222:2222"
+    depends_on:
+      - db_gitea_mysql
+#Contenidor per la base de dades de Gitea
+#Gitea utilitza una base de dades MySQL
+  db_gitea_mysql:
+    image: docker.io/library/mysql:8
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=gitea
+      - MYSQL_USER=gitea
+      - MYSQL_PASSWORD=gitea
+      - MYSQL_DATABASE=gitea
+    volumes:
+        - ../db_mysql:/var/lib/mysql
+#Contenidor per la base de dades de MariaDB
+#Aquest contenidor tindrà la base de dades de les aplicacions desenvolupades
+  db_mariadb:
+    image: mariadb:latest
+    restart: always
+    environment:
+      - MARIADB_USER=user 
+      - MARIADB_PASSWORD=password
+      - MARIADB_DATABASE=prova 
+      - MARIADB_ROOT_PASSWORD=rootpass
+    volumes:
+      - ../db_mariadb:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    environment:
+      - PMA_HOST=db_mariadb
+      - PMA_PORT=3306
+      - PMA_USER=user
+      - PMA_PASSWORD=password
+    ports:
+      - "9090:80"
+    depends_on:
+      - db_mariadb
+#Contenidor per l'aplicació web 
+  web:
+    image: nginx:latest
+    restart: always
+    volumes:
+    - ../nginx/templates:/etc/nginx/templates
+    ports:
+    - "8080:80"
+    environment:
+    - NGINX_PORT=80
+
