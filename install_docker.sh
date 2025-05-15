@@ -31,6 +31,10 @@ then
     sudo systemctl enable docker
     sudo systemctl start docker
 
+    sudo usermod -aG docker $USER
+    # Reinicia la sessió per aplicar els canvis de grup
+    echo "🔄 Reinicia la sessió per aplicar els canvis de grup. "
+
     echo "✅ Docker s'ha instal·lat correctament!"
 else
     echo "✅ Docker ja està instal·lat al sistema."
