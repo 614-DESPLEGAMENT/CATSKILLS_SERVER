@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuració
-NUM_COMPETIDORS=7
+NUM_COMPETIDORS=8
 BASE_HOME="/home"
 # PHP_VERSION="8.3"  
 
@@ -16,7 +16,8 @@ systemctl start ssh
 # Crear usuaris i estructures
 for i in $(seq 1 $NUM_COMPETIDORS); do
   USER="competidor$i"
-  PASSWORD="comp$i"
+  PASSWORD="C@ts$(printf '%03d' $i)$(echo -n $i | sha256sum | cut -c1-3 | tr 'a-f' 'A-F')"
+  echo "Creant usuari $USER amb contrasenya $PASSWORD..."
 
   echo "Creant usuari $USER..."
   useradd -m -s /bin/bash "$USER"
