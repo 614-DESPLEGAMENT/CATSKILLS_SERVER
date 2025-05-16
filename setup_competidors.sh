@@ -3,10 +3,11 @@
 # Configuració
 NUM_COMPETIDORS=7
 BASE_HOME="/home"
-PHP_VERSION="8.3"  
+# PHP_VERSION="8.3"  
 
 # Instal·lació bàsica
-apt update && apt install -y openssh-server php${PHP_VERSION}-fpm php${PHP_VERSION}-cli
+apt update && apt install -y openssh-server 
+#php${PHP_VERSION}-fpm php${PHP_VERSION}-cli
 
 # Activar SSH si cal
 systemctl enable ssh
