@@ -1,5 +1,5 @@
 #!/bin/bash
-domains=(catskills.cat gitea.catskills.cat www.catskills.cat competidor1.catskills.cat)
+domains=(catskills.cat gitea.catskills.cat www.catskills.cat competidor21.catskills.cat competidor31.catskills.cat)
 path="../nginx/data/certs"
 mkdir -p $path
 for domain in "${domains[@]}"; do

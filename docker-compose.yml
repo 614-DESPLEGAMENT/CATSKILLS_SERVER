@@ -73,6 +73,7 @@ services:
     - ./nginx/templates:/etc/nginx/templates
     - ./nginx/data/conf.d:/etc/nginx/conf.d
     - ./nginx/data/certs:/etc/certs
+    - /home/competidor1/modul2:/var/www/competidor1/modul2
     ports:
     - "80:80"
     - "443:443"
