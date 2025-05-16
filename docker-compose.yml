@@ -2,7 +2,7 @@
 services:
 #Contenidor per Gitea
 #Gitea és un gestor de repositoris Git autohostejat
-  server:
+  server_gitea:
     image: docker.gitea.com/gitea:latest-rootless
     environment:
       - GITEA__database__DB_TYPE=mysql
@@ -17,8 +17,8 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
-      - "3000:3000"
-      - "2222:2222"
+#      - "3000:3000"   No cal exposar el port 3000 perquè l'NGINX s'encarregarà de redirigir les peticions
+      - "2222:22"
     depends_on:
       - db_gitea_mysql
     networks:
@@ -28,8 +28,8 @@ services:
   db_gitea_mysql:
     image: docker.io/library/mysql:8
     restart: always
-    ports:
-      - "3309:3306"
+#    ports:
+#      - "3309:3306"  No cal exposar perquè és un contenidor privat
     environment:
       - MYSQL_ROOT_PASSWORD=gitea
       - MYSQL_USER=gitea
@@ -75,7 +75,7 @@ services:
     - ./nginx/data/certbot/conf:/etc/letsencrypt
     - ./nginx/data/certbot/www:/var/www/certbot
     ports:
-    - "8080:80"
+    - "80:80"
     environment:
     - NGINX_PORT=80
     networks:
