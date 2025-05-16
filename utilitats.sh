@@ -13,3 +13,5 @@ docker compose exec nginx ls -l /etc/certs
 /etc/php/8.4/fpm/pool.d/www.conf
 #Comprova si funciona el port
 sudo netstat -tulpn | grep php
+# Quan res funciona amb docker es recreen els contenidors
+docker compose up -d --force-recreate
