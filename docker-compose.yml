@@ -72,8 +72,7 @@ services:
     volumes:
     - ./nginx/templates:/etc/nginx/templates
     - ./nginx/data/conf.d:/etc/nginx/conf.d
-    - ./nginx/data/certbot/conf:/etc/letsencrypt
-    - ./nginx/data/certbot/www:/var/www/certbot
+    - ./nginx/data/certs:/etc/certs
     ports:
     - "80:80"
     - "443:443"

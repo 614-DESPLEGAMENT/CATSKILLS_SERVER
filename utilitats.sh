@@ -7,3 +7,5 @@ docker logs e44a56f57591 2>&1
 ip -4 addr show docker0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
 # Fitxer host de linux
 sudo nano /etc/hosts
+# Comprovar si un contenidor té acces a una carpeta
+docker compose exec nginx ls -l /etc/certs
