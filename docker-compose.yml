@@ -6,7 +6,7 @@ services:
     image: docker.gitea.com/gitea:latest-rootless
     environment:
       - GITEA__database__DB_TYPE=mysql
-      - GITEA__database__HOST=db:3309
+      - GITEA__database__HOST=db_gitea_mysql:3306
       - GITEA__database__NAME=gitea
       - GITEA__database__USER=gitea
       - GITEA__database__PASSWD=gitea
@@ -21,6 +21,8 @@ services:
       - "2222:2222"
     depends_on:
       - db_gitea_mysql
+    networks:
+      - gitea
 #Contenidor per la base de dades de Gitea
 #Gitea utilitza una base de dades MySQL
   db_gitea_mysql:
@@ -34,19 +36,23 @@ services:
       - MYSQL_PASSWORD=gitea
       - MYSQL_DATABASE=gitea
     volumes:
-        - ./db_mysql:/var/lib/mysql
+        - db_mysql:/var/lib/mysql
+    networks:
+      - gitea
 #Contenidor per la base de dades de MariaDB
 #Aquest contenidor tindrà la base de dades de les aplicacions desenvolupades
   db_mariadb:
     image: mariadb:latest
     restart: always
+    ports:
+      - "3306:3306"
     environment:
       - MARIADB_USER=user 
       - MARIADB_PASSWORD=password
       - MARIADB_DATABASE=prova 
       - MARIADB_ROOT_PASSWORD=rootpass
     volumes:
-      - ./db_mariadb:/var/lib/mysql
+      - db_mariadb:/var/lib/mysql
   phpmyadmin:
     image: phpmyadmin:latest
     restart: always
@@ -65,8 +71,20 @@ services:
     restart: always
     volumes:
     - ./nginx/templates:/etc/nginx/templates
+    volumes:
+      - ./nginx/data/nginx:/etc/nginx/conf.d
+      - ./nginx/data/certbot/conf:/etc/letsencrypt
+      - ./nginx/data/certbot/www:/var/www/certbot
     ports:
     - "8080:80"
     environment:
     - NGINX_PORT=80
+volumes:
+  db_mysql:
+    driver: local
+  db_mariadb:
+    driver: local
+networks:
+  gitea:
+    driver: bridge
 
