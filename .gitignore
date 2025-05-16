@@ -3,6 +3,10 @@ db_mariadb/*
 db_mysql/*
 gitea/config/*
 gitea/data/*
+nginx/data/certbot/conf/*
+nginx/data/certbot/www/*
+nginx/data/conf.d/*
+nginx/templates/*
 
 
 # Però NO ignoris el fitxer .gitkeep
@@ -10,3 +14,8 @@ gitea/data/*
 !db_mysql/.gitkeep
 !gitea/config/.gitkeep
 !gitea/data/.gitkeep
+!nginx/data/certbot/conf/.gitkeep
+!nginx/data/certbot/www/.gitkeep    
+!nginx/data/conf.d/default.conf
+!nginx/data/conf.d/.gitkeep
+!nginx/templates/.gitkeep
