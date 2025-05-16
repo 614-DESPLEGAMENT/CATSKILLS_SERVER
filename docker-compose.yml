@@ -12,7 +12,7 @@ services:
       - GITEA__database__PASSWD=gitea
     restart: always
     volumes:
-      - ./gitea/data:/var/lib/gitea
+      - gitea_data:/var/lib/gitea
       - ./gitea/config:/etc/gitea
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -87,6 +87,8 @@ volumes:
   db_mysql:
     driver: local
   db_mariadb:
+    driver: local
+  gitea_data:
     driver: local
 networks:
   gitea:
