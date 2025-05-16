@@ -25,6 +25,8 @@ for i in $(seq 1 $NUM_COMPETIDORS); do
   # Crear carpetes per projectes
   mkdir -p $BASE_HOME/$USER/modul2
   mkdir -p $BASE_HOME/$USER/modul3
+  chown root:root $BASE_HOME/$USER
+  chmod 755 $BASE_HOME/$USER
 
   chown -R $USER:$USER $BASE_HOME/$USER/modul2
   chown -R $USER:$USER $BASE_HOME/$USER/modul3
@@ -32,7 +34,7 @@ for i in $(seq 1 $NUM_COMPETIDORS); do
   # Opcional: configurar accés SFTP només a les seves carpetes
   echo "Match User $USER
     ChrootDirectory $BASE_HOME/$USER
-    ForceCommand internal-sftp
+    # ForceCommand internal-sftp
     X11Forwarding no
     AllowTcpForwarding no" >> /etc/ssh/sshd_config
 
