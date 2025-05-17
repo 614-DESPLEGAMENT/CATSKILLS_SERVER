@@ -8,7 +8,10 @@ for USER in "${USUARIS[@]}"; do
   echo "Restringint permisos de lectura a altres carpetes per a $USER..."
 
   # Assegurar que la carpeta base de l'usuari només tingui permisos per al propietari i root
+  sudo chown $USER:$USER "$BASE_HOME/$USER"
   sudo chmod 700 "$BASE_HOME/$USER"
+  sudo chmod 755 $BASE_HOME/$USER/modul2
+  sudo chmod 755 $BASE_HOME/$USER/modul3
   echo "Permisos de $BASE_HOME/$USER establerts a 700 (drwx------)."
 
   # Opcionalment, si vols que puguin executar fitxers dins la seva carpeta, deixa-ho en 755
