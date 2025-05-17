@@ -1,0 +1,61 @@
+#!/bin/bash
+
+BASE_HOME="/home" # Ajusta aquesta variable si la teva carpeta base és diferent
+USUARIS=("competidor1" "competidor2" "competidor3" "competidor4" "competidor5" "competidor6" "competidor7" "competidor8" "prova")
+
+# Funció per copiar un fitxer amb la seva estructura de directoris dins del chroot
+copia_amb_parents() {
+  local fitxer="$1"
+  local dest_base="$2"
+  local dest_relatiu=$(echo "$fitxer" | sed 's/^\///') # Treu la barra inicial per crear la ruta relativa
+  local dest_complet="$dest_base/$dest_relatiu"
+  local dest_dir=$(dirname "$dest_complet")
+
+  echo "Creant directori: $dest_dir"
+  sudo mkdir -p "$dest_dir"
+  echo "Copiant: $fitxer a $dest_complet"
+  sudo cp -v "$fitxer" "$dest_complet"
+}
+
+for USER in "${USUARIS[@]}"; do
+  CHROOT_PATH="$BASE_HOME/$USER"
+  echo "Preparant entorn chroot per a $USER a: $CHROOT_PATH"
+
+  # Crear els directoris bàsics dins del chroot
+  sudo mkdir -p "$CHROOT_PATH/bin"
+  sudo mkdir -p "$CHROOT_PATH/lib64" # Assumim arquitectura de 64 bits, potser cal ajustar a 'lib'
+  sudo mkdir -p "$CHROOT_PATH/lib"   # Per si alguna llibreria és a /lib
+
+  # Copiar bash
+  sudo cp -v /bin/bash "$CHROOT_PATH/bin/"
+
+  # Copiar les llibreries de bash
+  list="$(ldd /bin/bash | egrep -o '/lib(64)?/.*\.[0-9]')"
+  for i in $list; do
+    copia_amb_parents "$i" "$CHROOT_PATH"
+  done
+
+  # Copiar llibreries addicionals que podrien ser necessàries (intenta ser exhaustiu)
+  llibreries_addicionals=(
+    "/lib64/ld-linux-x86-64.so.2" # Carregador de programes (per a sistemes de 64 bits)
+    "/lib/ld-linux.so.2"         # Carregador de programes (per a sistemes de 32 bits)
+    "/lib64/libc.so.6"
+    "/lib/libc.so.6"
+    # Afegeix aquí altres llibreries que 'ldd bash' hagi mostrat
+  )
+
+  for lib in "${llibreries_addicionals[@]}"; do
+    if [ -e "$lib" ]; then
+      copia_amb_parents "$lib" "$CHROOT_PATH"
+    fi
+  done
+
+  # Configurar l'accés SSH amb ChrootDirectory (sense forçar internal-sftp ara)
+  echo "Configurant accés SSH amb ChrootDirectory per a $USER..."
+  sudo sed -i "/^Match User $USER$/,/^AllowTcpForwarding no$/s/^\s*#\s*ChrootDirectory.*/  ChrootDirectory $BASE_HOME\/$USER/" /etc/ssh/sshd_config
+  sudo sed -i "/^Match User $USER$/,/^AllowTcpForwarding no$/s/^\s*ForceCommand internal-sftp/# ForceCommand internal-sftp/" /etc/ssh/sshd_config
+
+done
+
+# Reiniciar el servei SSH per aplicar els canvis
+sudo systemctl restart sshd
