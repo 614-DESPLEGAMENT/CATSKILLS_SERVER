@@ -6,17 +6,13 @@ USUARIS=("competidor1" "competidor2" "competidor3" "competidor4" "competidor5" "
 
 for USER in "${USUARIS[@]}"; do
   echo "Restringint permisos de lectura a altres carpetes per a $USER..."
+  chmod 750 $BASE_HOME/$USER
+  chown root:$USER $BASE_HOME/$USER
 
-  # Assegurar que la carpeta base de l'usuari només tingui permisos per al propietari i root
-  sudo chown $USER:$USER "$BASE_HOME/$USER"
-  sudo chmod 700 "$BASE_HOME/$USER"
-  sudo chmod 755 $BASE_HOME/$USER/modul2
-  sudo chmod 755 $BASE_HOME/$USER/modul3
-  chown root:root $BASE_HOME/$USER
-  chmod 755 $BASE_HOME/$USER
+  # Donar accés complet a l’usuari sobre les seves carpetes
+  chown -R $USER:$USER $BASE_HOME/$USER/modul2 $BASE_HOME/$USER/modul3
+  chmod 700 $BASE_HOME/$USER/modul2 $BASE_HOME/$USER/modul3
 
-  chown -R $USER:$USER $BASE_HOME/$USER/modul2
-  chown -R $USER:$USER $BASE_HOME/$USER/modul3
   echo "Permisos de $BASE_HOME/$USER establerts a 700 (drwx------)."
 
   # Opcionalment, si vols que puguin executar fitxers dins la seva carpeta, deixa-ho en 755

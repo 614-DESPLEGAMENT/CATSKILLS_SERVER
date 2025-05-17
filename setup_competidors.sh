@@ -35,7 +35,7 @@ for i in $(seq 1 $NUM_COMPETIDORS); do
   # Opcional: configurar accés SFTP només a les seves carpetes
   echo "Match User $USER
     ChrootDirectory $BASE_HOME/$USER
-    # ForceCommand internal-sftp
+    ForceCommand internal-sftp
     X11Forwarding no
     AllowTcpForwarding no" >> /etc/ssh/sshd_config
 
