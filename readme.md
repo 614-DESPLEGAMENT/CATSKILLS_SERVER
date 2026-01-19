@@ -1,4 +1,4 @@
-# 🧪 Plataforma de Competidors amb Gitea, Laravel i MariaDB Prova
+# 🧪 Plataforma de Competidors amb Gitea, Laravel i MariaDB Prova5
 
 Aquest projecte configura un entorn complet per gestionar exercicis pràctics amb 7 competidors. Està pensat per oferir un entorn de desenvolupament i desplegament simple però segur, utilitzant Docker i accés per SSH/SFTP.
 
